@@ -8,11 +8,25 @@ module.exports = async function (context, req) {
     const accountSid = process.env.TWILIO_ACCOUNT_SID;
     const authToken = process.env.TWILIO_AUTH_TOKEN;
 
+    
+
     const client = require('twilio')(accountSid, authToken);
 
+    console.log(translatedText)
+
+    let msgToReturn;
+
+    try {
+        msgToReturn = translatedText.contents.translated;
+    }
+    catch (err) {
+        msgToReturn = "Oops, an error occurred. Maybe you sent too many requests."
+    }
+
+    context.log(msgToReturn)
     client.messages
     .create({
-        body: `Translated text: ${translatedText}`,
+        body: `${msgToReturn}`,
         from: '+18507834852',
         to: '+19195279302'
     })
